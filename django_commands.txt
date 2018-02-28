@@ -1,0 +1,57 @@
+sudo apt-get install python-setuptools
+
+sudo easy_install --upgrade django
+
+python --version
+
+sudo apt-get intall python3
+
+sudo apt-get install python3-pip 
+
+python3 -V
+
+python3 -m django --version
+
+python -m pip uninstall django      = uninstalls django version 1.8
+
+pip3 install django
+
+pip install djangorestframework
+
+sudo apt-get install python3-env
+
+python3 -m venv
+
+venv
+
+virtualenv env      = creates virtual environment
+
+source env/bin/activate     = activates virtual environment
+
+
+'''
+import django
+print(django.get_version())
+quit()
+
+'''
+
+django-admin startproject project_name
+
+python3 manage.py runserver ip:port
+
+python3 manage.py startapp app_name
+
+python3 manage.py makemigrations app_name       =  tells django that you have made changes to models
+
+python3 manage.py migrate
+
+python3 manage.py shell         = invokes python shell 
+
+python3 manage.py createsuperuser
+
+python3 manage.py sqlmigrate app_name file_in_migrations_folder         = shows sql for migrations
+
+http://127.0.0.1:8000/admin/        = admin url
+
+

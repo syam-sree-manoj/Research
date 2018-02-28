@@ -1,0 +1,127 @@
+1. configuration:
+    system level: applies to every user of system.
+                  /etc/gitconfig
+                  git config --system
+    user leverl:  
+                 ~/.gitconfig
+                 git config --global
+    projet level:
+                 my_project/.git/config
+                 git config
+
+2. Set default editor for git
+    git config --global core.editor "sublime" -wl1
+        w : wait until I am done
+        l1: put cursor on line 1
+
+3. Tell git to use colors
+    git config --global color.ui true                                                            
+
+4. Feature on git(auto completion)
+    cd ~
+    curl -OL https://github.com/git/git/raw/master/contrib/
+             completion/git-completion.bash
+    mv ~/git-completion.bash ~/.git-completion.bash
+
+        ~/.bash_profile
+        if[ -f ~/.git-completion.bash]; then
+            source ~/.git-completion.bash
+        fi
+
+5. Initialize git:
+    git init 
+
+6. git add .
+
+7. git commit -m "Commit message"
+
+8. Git log (Commit log):
+    git log
+    git log -n 2
+        n: number of commits to show
+    git log --since = 2012-06-12
+    git log --until = 2012-06-12
+    git log --author = "syam"
+    git log --grep = "Init"
+        grep: global regular expression search
+
+9. HEAD is tip of currently checked out branch. start with HEAD and go backwards i.e recent to past commits.   
+    git log HEAD
+
+10. git status
+                Display if there are any untracked files in working directory.
+
+11. git diff
+                Compares version that HEAD is pointing to versus what is in working directory
+
+12. git diff --staged
+                compares staging index with repository
+
+13. Deleting files that are being tracked:
+    git rm file_to_be_deleted.txt :
+        removes file from working directory and put it in staging index.
+
+    git status
+    git commit -m "deleted file"
+
+14. Renaming and moving files:
+    Method 1:
+            Rename file directly
+            git status
+            git add new_renamed_file
+            git rm old_renamed_file
+            
+    Method 2:
+            git mv old_file_name new_file_name
+            git commit -m "message"
+
+15. Undoing changes to working directory:
+        If you change a file in working directory and you want to revert back to
+        file present in git repository then use checkout command.
+
+        git checkout -- index.html :
+            gives index.html file in git repository to working directory.
+            Go to repository and check the named thing that I gave you and make my working directory look like that
+            So, if named thing is branch, it brings branch down if there is same name to file.
+
+            we use -- to specify be on same branch.
+16. git commit -a 
+                    : add, commit both
+
+17. Undo changes to staging index:
+    git reset HEAD <file>  
+                         Unstage the changed from index staging
+
+18.                                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
+

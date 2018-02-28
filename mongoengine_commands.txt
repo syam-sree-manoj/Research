@@ -1,0 +1,18 @@
+1. pip3 install mongoengine
+
+
+In settings.py
+
+2.  from mongoengine import *
+    mongoengine.connect(
+        db="tools",
+        host="localhost"
+    ) 
+
+3.
+    pip3 install django-rest-framework-mongoengine
+    
+
+4.
+    sudo pip install mongoengine==0.9   
+    with mongoengine 0.10 we can see that /usr/lib/python2.7/site-packages/mongoengine/ will not have django package in it.  

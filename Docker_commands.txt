@@ -1,0 +1,15 @@
+1. docker image build --tag image_custom_name .
+
+2. docker container run --detach --publish host_port:container_port --name container_name image_custom_name
+
+3. docker rm --force container_name
+
+4. docker image run --interactive --tty image_custom_name bash
+
+5. docker image rm image_custom_name 
+
+6. docker container ls -all
+
+7. docker container stop container_name or container_ID
+
+8. docker container ps 

@@ -1,0 +1,5 @@
+Git keeps track of changes that you make to files and directories
+and good in keeping track of text changes that you make.
+
+Git allows you to go back and forth of different version, compare 
+etc.

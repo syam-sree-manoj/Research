@@ -1,0 +1,123 @@
+Why MongoDB?
+    What if you need to work with deeply nested JSONs in your REST api? 
+    If you are going to stick with PostgreSQL for storing these data, you have two options. 
+    Either use JSONFields or parse these JSONs into relations. JSONField solution has 2 major problems. 
+        First, you have to validate the incoming values manually, writing huge validators. 
+        This defeats the whole purpose of DRF, cause validation out-of-the-box is exactly what it was meant to do for you. 
+        Second major problem is that you can’t use relations within JSONFields .
+        The other approach — parsing large JSONs into multiple tables — takes a lot of time, makes your code error-prone
+        and plain ugly. You’ll run mad, normalizing this tree of nested structures into relations. Especially, given the fact 
+        that DRF doesn’t support writable nested serializers out of the box, cause you can think of multiple different ways 
+        how to deal with them.
+    So, your solution is simple: switch to MongoDB for such a resource. Mongo supports nested data structures out of the box 
+    and there’s also a way to deal with relations in Mongoengine, when you really need them.
+What is Mongoengine?
+    Mongoengine was started in the late 2009 by Harry Marr, but it was brought to the production level later in 2011-2015 
+    by Ross Lawley. It is an Object-Document Mapper (ODM), a MongoDB analogue of what Django ORM is for relational databases.
+    Basically, Mongoengine provides a declarative API for defining the schema of your MongoDB document and a query language,
+    almost identical to Django ORM    
+
+    """
+        from mongoengine import Document, EmbeddedDocument, fields
+
+        class Tool(Document):
+            label = fields.StringField(required=True)
+            description = fields.StringField(required=True, null=True)
+            inputs = fields.ListField(fields.EmbeddedDocumentField(ToolInput))
+
+        class ToolInput(EmbeddedDocument):
+            name = fields.StringField(required=True)
+            value = fields.DynamicField(required=True)
+    """            
+    The following is a valid Tool to store in MongoDB:
+    """
+        {
+            label: "wget",
+            description: "A non-interactive network donwloader",
+            inputs: [
+                {
+                    name: "url",
+                    value: "https://medium.com"
+                },
+                {
+                    name: "options",
+                    value: 123
+                }
+            ]
+        }
+    """        
+
+    Mongoengine also offers a request language, almost identical to Django ORM:
+    Here we created an instance of our Tool object in MongoDB.
+    """
+    tool = Tool.objects.create(
+    label=”wget”,
+    description="A non-interactive network downloader",
+    inputs=[ToolInput(name="url", value="https://medium.com"])
+    )
+    """
+
+Django-REST-Framework-Mongoengine - https://github.com/umutbozkurt/django-rest-framework-mongoengine   
+First of all, we need to create a connection with MongoDB. Let’s do this in 
+
+settings.py:
+"""
+mongoengine.connect(
+    db="tools",
+    host="localhost"
+)
+"""
+
+Mongoengines 0.9- use PyMongo2, while Mongoengine 0.10+use PyMongo3. This syntax is for the OLD Mongoengine 0.9-.
+I use the older one, because it comes with a built-in integration with Django authentication and sessions system.
+In Mongoengine 0.10 they’ve separated that code into a standalone project Django-Mongoengine, but it is not stable yet.
+
+Models:
+"""
+from mongoengine import Document, EmbeddedDocument, fields
+
+class Tool(Document):
+    label = fields.StringField(required=True)
+    description = fields.StringField(required=True, null=True)
+    inputs = fields.ListField(fields.EmbeddedDocumentField(ToolInput))
+
+class ToolInput(EmbeddedDocument):
+    name = fields.StringField(required=True)
+    value = fields.DynamicField(required=True)
+"""
+
+Now, we need a ModelSerializer, which is called DocumentSerializer (we’re calling Models “Documents” in MongoDB world, right?).
+And luckily, we don’t need to specify any nested Serializers as DRF-Mongoengine creates them for us automatically,
+if it sees EmbeddedDocuments within our Document. Just specify the Document in Meta.model:
+
+Serializers:
+
+"""
+from rest_framework_mongoengine import serializers
+
+class ToolSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model = Tool
+        fields = '__all__'
+"""
+
+And last, we need a ViewSet for this endpoint. Again, everything is very similar to pure DRF.
+Just define a lookup_field and serializer_class, but instead of specifying queryset in declarative manner,
+define a method get_queryset(), which works equivalently. (if I’m not mistaken, the difference stems from the 
+fact that Django ORM evaluates its queryset lazily, while Mongoengine attempts to do pre-caching)
+
+"""
+from rest_framework_mongoengine import viewsets
+
+class ToolViewSet(viewsets.ModelViewSet):
+    '''
+    Contains information about inputs/outputs of a single program
+    that may be used in Universe workflows.
+    '''
+    lookup_field = 'id'
+    serializer_class = ToolSerializer
+
+    def get_queryset(self):
+        return Tool.objects.all()
+
+"""        

@@ -1,0 +1,8 @@
+1.
+    "Debugging" usually refers to the act of finding out what is causing a bug in a computer program, done by a person 
+    with the ability and authorization to change the computer program to fix the bug once the problem is found and pinned down.
+
+2.
+    "Troubleshooting" usually refers to the act of finding out how to fix or work around a problem in a computer program
+    one is trying to get to run. Usually it is done by a person who does not have the option to alter the code, but has a
+    program that is supposed to already be debugged. It involves finding conflicts in configuration or the like. 

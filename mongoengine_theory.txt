@@ -1,0 +1,95 @@
+1.Database schema:
+    Database schema is the skeleton of database. It is designed when the database doesn't exist at all.
+    A database schema does not contain any data or information.A database schema is the skeleton structure 
+    that represents the logical view of the entire database. It defines how the data is organized and how the relations among
+    them are associated.
+    It contains a descriptive detail of the database, which can be depicted by means of schema diagrams. 
+
+2.Database instance:
+    A database instance is a state of operational database with data at any given time.    
+
+3.MongoDB is schemaless, which means that no schema is enforced by the database — we may add and remove fields however we want.
+However, defining schemas for our documents can help to iron out bugs involving incorrect types or missing fields, and also 
+allow us to define utility methods on our documents in the same way that traditional ORMs do.
+
+
+Problem statement:
+                    In our Tumblelog application we need to store several different types of information. We will need to have 
+                    a collection of users, so that we may link posts to an individual. We also need to store our different types 
+                    of posts (eg: text, image and link) in the database. To aid navigation of our Tumblelog, posts may have tags
+                    associated with them, so that the list of posts shown to the user may be limited to posts that have been 
+                    assigned a specific tag. Finally, it would be nice if comments could be added to posts.
+4.
+'''
+class User(Document):
+    email = StringField(required=True)
+    first_name = StringField(max_length=50)
+    last_name = StringField(max_length=50)
+'''
+This looks similar to how the structure of a table would be defined in a regular ORM. The key difference is that this schema will 
+never be passed on to MongoDB — this will only be enforced at the application level, making future changes easy to manage.
+Also, the User documents will be stored in a MongoDB collection rather than a table.
+
+5. 
+
+We will store all of the posts in one collection and each post type will only store the fields it needs. If we later want 
+to add video posts, we don’t have to modify the collection at all, we just start using the new fields we need to support video 
+posts. This fits with the Object-Oriented principle of inheritance nicely. We can think of Post as a base class, 
+and TextPost, ImagePost and LinkPost as subclasses of Post. In fact, MongoEngine supports this kind of modeling 
+out of the box — all you need do is turn on inheritance by setting allow_inheritance to True in the meta:
+
+'''
+class Post(Document):
+    title = StringField(max_length=120, required=True)
+    author = ReferenceField(User)
+    tags = ListField(StringField(max_length=30))
+    meta = {'allow_inheritance': True}
+
+class TextPost(Post):
+    content = StringField()
+
+class ImagePost(Post):
+    image_path = StringField()
+
+class LinkPost(Post):
+    link_url = StringField()
+'''
+
+We are storing a reference to the author of the posts using a ReferenceField object. These are similar to foreign key fields 
+in traditional ORMs, and are automatically translated into references when they are saved, and dereferenced when they are loaded.    
+The ListField object that is used to define a Post’s tags takes a field object as its first argument — this means that you 
+can have lists of any type of field (including lists).
+
+6.
+
+There is no real reason to be storing the comments separately from their associated posts, other than to work around the
+relational model. Using MongoDB we can store the comments as a list of embedded documents directly on a post document.
+An embedded document should be treated no differently than a regular document; it just doesn’t have its own collection 
+in the database. Using MongoEngine, we can define the structure of embedded documents, along with utility methods, 
+in exactly the same way we do with regular documents:
+
+'''
+class Comment(EmbeddedDocument):
+    content = StringField()
+    name = StringField(max_length=120)
+'''
+
+We can then store a list of comment documents in our post document:
+'''
+class Post(Document):
+    title = StringField(max_length=120, required=True)
+    author = ReferenceField(User)
+    tags = ListField(StringField(max_length=30))
+    comments = ListField(EmbeddedDocumentField(Comment))
+'''        
+
+The ReferenceField object takes a keyword reverse_delete_rule for handling deletion rules if the reference is deleted. 
+To delete all the posts if a user is deleted set the rule:
+
+'''
+class Post(Document):
+    title = StringField(max_length=120, required=True)
+    author = ReferenceField(User, reverse_delete_rule=CASCADE)
+    tags = ListField(StringField(max_length=30))
+    comments = ListField(EmbeddedDocumentField(Comment))
+'''    
