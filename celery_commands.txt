@@ -1,0 +1,7 @@
+1.
+    Test that the Celery worker is ready to receive tasks:
+        celery -A <project name> worker -l info
+
+2.
+    Test the Celery task scheduler is ready for action:       
+        celery -A <project name> beat -l info 

@@ -92,7 +92,8 @@
     git reset HEAD <file>  
                          Unstage the changed from index staging
 
-18.                                                      
+18. Remove git remote
+    git remote rm <remote_alias>                                                
 
 
 

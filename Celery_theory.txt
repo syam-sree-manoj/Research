@@ -1,0 +1,28 @@
+1.
+    Celery is a task queue implementation for Python web applications used to asynchronously execute work outside the HTTP request-response cycle.
+
+2.
+    Why is Celery useful?
+
+        Think of all the times you have had to run a certain task in the future. Perhaps you needed to access an API every hour. 
+        Or maybe you needed to send a batch of emails at the end of the day. Large or small, Celery makes scheduling such periodic tasks easy.
+
+        You never want end users to have to wait unnecessarily for pages to load or actions to complete. If a long process is part of your
+        application’s workflow, you can use Celery to execute that process in the background, as resources become available, so that your 
+        application can continue to respond to client requests. This keeps the task out of the application’s context.
+
+3.
+    Celery uses “brokers” to pass messages between a Django Project and the Celery workers. 
+
+4.
+    Celery utilizes tasks, which can be thought of as regular Python functions that are called with Celery.    
+
+when you fire a task, it sends a message to broker( broker is the brain and messaging center, rabbitMQ is message broker).
+
+RabbitMQ is a queue, you send messages to it, it will relay those messages to people who are listening. Completes the request and stores
+the result if needed.
+
+When you call a task from the queue, it runs in the background and put the result in another queue but doesn't store it, when you ask for result
+it will give the result and it is gone. So put the result in result store like redis.
+
+Task is the function that you would run anyways but runs asynchronously.
