@@ -1,6 +1,6 @@
 1. docker image build --tag image_custom_name .
 
-2. docker container run --detach --publish host_port:container_port --name container_name image_custom_name
+2. docker container run --detach --publish host_port:container_port --name container_name  image_custom_name
 
 3. docker rm --force container_name
 
@@ -12,4 +12,17 @@
 
 7. docker container stop container_name or container_ID
 
-8. docker container ps 
+8. 
+        docker container ps    : show all running containers
+        docker container ps -a : Show all containers
+                                
+9. docker images -q |xargs docker rmi --force
+        removing all unused docker images
+
+10. docker ps -q |xargs docker rm 
+        removing all stopped docker containers 
+
+11. docker exec -it <container name> /bin/bash
+        ssh into container
+
+        
