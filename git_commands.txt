@@ -93,11 +93,25 @@
                          Unstage the changed from index staging
 
 18. Remove git remote
-    git remote rm <remote_alias>                                                
+    git remote rm <remote_alias>        
 
 
+Create a remote Git branch                                       
 
+    19. Create a new branch and check it out
+        git checkout -b <branch-name> 
 
+    20. The remote branch is automatically created when you push it to the remote server.
+        git push <remote-name> <branch-name> 
+        git push <remote-name> <local-branch-name>:<remote-branch-name>
+
+Adding a remote
+
+    21. Set a new remote
+        git remote add <remote-name> <remote-url>
+
+    22. Verify new remote
+        git remote -v        
 
 
 
