@@ -36,3 +36,13 @@
     The biggest difference between Flask and Django is:
         Flask implements a bare-minimum and leaves the bells and whistles to add-ons or to the developer
         Django follows a "batteries included" philosophy and gives you a lot more out of the box.     
+
+7. Differnce between JSON and Dictionary
+    In order to actually transmit any data, that data has to be in a specific format. A dict by itself is an abstract object.
+    If you wanted to store a dict in a file, or send it over a network connection, then you'd need to turn that dict into a 
+    series of bytes, and then at the other end you'd have to parse those bytes and reconstitute the dict object. 
+    That process is called serialization. JSON is one set of rules for how to convert data structures to strings of bytes
+    and vice versa. There are many others. JSON only allows a subset of what a full dict can contain, however, 
+    since it's meant to be used as a common format used between different languages. JSON can only represent objects that
+    have strings as keys, for instance.If you had a dict with a tuple as a key for instance, you'd have a hard time converting
+    that to JSON.        

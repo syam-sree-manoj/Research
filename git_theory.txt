@@ -3,3 +3,44 @@ and good in keeping track of text changes that you make.
 
 Git allows you to go back and forth of different version, compare 
 etc.
+
+Difference between “GIT PULL” and “GIT FETCH”?
+    In the simplest terms, git pull does a git fetch followed by a git merge.
+    say you have uploaded your project on GIT.Now your team partner is now already working on the same project 
+    and he has made some changes into it. So we have two copies of the code.
+
+    1.On GIT which u uploaded.
+    2.on your colleague machine with some latest changes.
+
+    Now you told your colleague to get that code from the GIT.
+
+    Scenario 1: He can get that code using GIT PULL
+
+    If he/she use this command then the updated code on local machine will get replace with the code from GIT Repository.
+
+    Scenario 2 : He can get that code using GIT FETCH.
+
+    If he/she use this command then the updated code on local machine will get merged with the code from GIT Repository. 
+    So, your colleague won’t loose any work done.
+
+Difference between git clone and git pull?
+#######
+git init
+git remote add origin git://github.com/cmcculloh/repo.git
+git fetch --all
+git pull origin master
+#######
+git clone git://github.com/cmcculloh/repo.git
+#######
+    They're basically the same, except clone will setup additional remote tracking branches, not just master. 
+    Clones a repository into a newly created directory, creates remote-tracking branches for each branch in the
+    cloned repository (visible using git branch -r), and creates and checks out an initial branch that is forked 
+    from the cloned repository's currently active branch.
+
+    git clone is how you get a local copy of an existing repository to work on. 
+    It's usually only used once for a given repository, unless you want to have multiple working copies of it around. 
+    (Or want to get a clean copy after messing up your local one...) git pull (or git fetch + git merge) is how you 
+    update that local copy with new commits from the remote repository. If you are collaborating with others, it is a 
+    command that you will run frequently.
+
+
